@@ -27,10 +27,10 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
- * Standalone application context, accepting annotated classes as input - in particular
- * {@link Configuration @Configuration}-annotated classes, but also plain
- * {@link org.springframework.stereotype.Component @Component} types and JSR-330 compliant
- * classes using {@code javax.inject} annotations. Allows for registering classes one by
+ * 独立的应用程序上下文，接受带注解的类作为输入，特别的是{@link Configuration @Configuration}
+ * 注解类，但是也包括{@link org.springframework.stereotype.Component @Component}类型
+ * 和使用JSR-330兼容注解{@code javax.inject}的类
+   Allows for registering classes one by
  * one using {@link #register(Class...)} as well as for classpath scanning using
  * {@link #scan(String...)}.
  *
@@ -58,6 +58,8 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 
 
 	/**
+	 * 直接创建AnnotationConfigApplicationContext 需要调用register注册
+	 * 和refresh进行手动刷新上下文
 	 * Create a new AnnotationConfigApplicationContext that needs to be populated
 	 * through {@link #register} calls and then manually {@linkplain #refresh refreshed}.
 	 */
@@ -76,19 +78,21 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 		this.scanner = new ClassPathBeanDefinitionScanner(this);
 	}
 
-	/**
+	/**通过带注解的class创建AnnotationConfigApplicationContext，会自动刷新上下文
 	 * Create a new AnnotationConfigApplicationContext, deriving bean definitions
 	 * from the given annotated classes and automatically refreshing the context.
 	 * @param annotatedClasses one or more annotated classes,
 	 * e.g. {@link Configuration @Configuration} classes
 	 */
 	public AnnotationConfigApplicationContext(Class<?>... annotatedClasses) {
+		//创建AnnotationConfigApplicationContext，reader和scanner
 		this();
+		//注册配置文件类到beanfactory
 		register(annotatedClasses);
 		refresh();
 	}
 
-	/**
+	/**通过扫描包创建新的AnnotationConfigApplicationContext，会自动刷新上下文
 	 * Create a new AnnotationConfigApplicationContext, scanning for bean definitions
 	 * in the given packages and automatically refreshing the context.
 	 * @param basePackages the packages to check for annotated classes
@@ -143,7 +147,7 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	// Implementation of AnnotationConfigRegistry
 	//---------------------------------------------------------------------
 
-	/**
+	/**注册一个或多个注解类来使用
 	 * Register one or more annotated classes to be processed.
 	 * <p>Note that {@link #refresh()} must be called in order for the context
 	 * to fully process the new classes.

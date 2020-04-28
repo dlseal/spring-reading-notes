@@ -68,6 +68,7 @@ public class StandardAnnotationMetadata extends StandardClassMetadata implements
 	public StandardAnnotationMetadata(Class<?> introspectedClass, boolean nestedAnnotationsAsMap) {
 		super(introspectedClass);
 		this.annotations = introspectedClass.getAnnotations();
+		//这个字段是为了将嵌套的注解和一般注解转化为注解描述对象（AnnotationAttributes）数组
 		this.nestedAnnotationsAsMap = nestedAnnotationsAsMap;
 	}
 
